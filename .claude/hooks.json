@@ -1,0 +1,27 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "pattern": "project/config/*.arxml",
+      "command": "bash hooks/pre-arxml-write.sh",
+      "description": "Pre-validate ARXML before writing to project config directory"
+    },
+    {
+      "event": "PostToolUse",
+      "pattern": "project/config/*.arxml",
+      "command": "bash hooks/post-arxml-write.sh",
+      "description": "Quick well-formedness check after ARXML modification"
+    },
+    {
+      "event": "PostToolUse",
+      "tools": ["mcp__davinci__davinci_generate"],
+      "command": "bash hooks/post-generate.sh",
+      "description": "Run compile smoke test after code generation"
+    },
+    {
+      "event": "SessionEnd",
+      "command": "bash hooks/session-end.sh",
+      "description": "Write session progress delta to CLAUDE.md"
+    }
+  ]
+}

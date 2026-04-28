@@ -1,0 +1,13 @@
+{
+  "memory_type": "INTERNAL_FLASH",
+  "sectors": [
+    {
+      "start": "0x00100000",
+      "size": 8192,
+      "count": 4
+    }
+  ],
+  "page_size": 8,
+  "erase_value": "0xFF",
+  "max_erase_cycles": 100000
+}

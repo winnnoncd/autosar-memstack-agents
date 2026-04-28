@@ -1,0 +1,29 @@
+# Build outputs
+build/
+project/config/*.arxml
+generated/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# DVP temp files
+*.dpa.bak
+*.dpa.lock
+validation_report.*
+
+# Node (if any JS tooling)
+node_modules/

@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "davinci": {
+      "command": "python",
+      "args": ["mcp-servers/vector-davinci-mcp/server.py"],
+      "transport": "stdio",
+      "env": {
+        "DVP_EXE": "C:/Vector/DaVinciCFG/Appl/DaVinciCFG.exe",
+        "DVP_PROJECT": "./project/ecm.dpa",
+        "DVP_REPORT_DIR": "./build/reports",
+        "DVP_PAI_SCRIPTS": "./mcp-servers/vector-davinci-mcp/groovy_templates"
+      }
+    }
+  }
+}

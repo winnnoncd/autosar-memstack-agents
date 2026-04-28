@@ -1,0 +1,13 @@
+{
+  "memory_type": "EEPROM",
+  "sectors": [
+    {
+      "start": "0x0000",
+      "size": 256,
+      "count": 4
+    }
+  ],
+  "page_size": 64,
+  "erase_value": "0xFF",
+  "max_erase_cycles": 1000000
+}

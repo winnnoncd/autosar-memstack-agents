@@ -1,0 +1,60 @@
+{
+  "blocks": [
+    {
+      "name": "VehicleOdometer",
+      "size": 8,
+      "type": "NATIVE",
+      "asil": "QM",
+      "use_crc": true,
+      "crc_type": "CRC16",
+      "write_policy": "DURING_WRITEALL",
+      "priority": 10,
+      "default_value": "0x00"
+    },
+    {
+      "name": "DtcStatusByte",
+      "size": 128,
+      "type": "NATIVE",
+      "asil": "QM",
+      "use_crc": true,
+      "crc_type": "CRC16",
+      "write_policy": "DURING_WRITEALL",
+      "priority": 5,
+      "default_value": "0x00"
+    },
+    {
+      "name": "CrashData",
+      "size": 64,
+      "type": "REDUNDANT",
+      "asil": "ASIL_D",
+      "use_crc": true,
+      "crc_type": "CRC32",
+      "write_policy": "IMMEDIATE",
+      "priority": 0,
+      "default_value": "0xFF"
+    },
+    {
+      "name": "SafetyCounter",
+      "size": 4,
+      "type": "REDUNDANT",
+      "asil": "ASIL_B",
+      "use_crc": true,
+      "crc_type": "CRC16",
+      "write_policy": "DURING_WRITEALL",
+      "priority": 1,
+      "default_value": "0x00"
+    },
+    {
+      "name": "CalibrationSet",
+      "size": 512,
+      "type": "DATASET",
+      "asil": "QM",
+      "use_crc": true,
+      "crc_type": "CRC32",
+      "write_policy": "DURING_WRITEALL",
+      "priority": 20,
+      "num_datasets": 3,
+      "default_value": "0x00"
+    }
+  ]
+}

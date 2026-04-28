@@ -1,8 +1,6 @@
 ---
 name: memstack-fls-eep
-description: >
-  Fls (Flash driver) and Eep (EEPROM driver) MCAL configuration.
-  Bottom of the memory stack — defines physical memory geometry.
+description: Use when configuring Fls sectors or Eep parameters, when working with MCAL flash or EEPROM drivers at the bottom of the memory stack
 ---
 
 # Fls / Eep Configuration Patterns

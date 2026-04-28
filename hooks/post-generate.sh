@@ -1,20 +1,32 @@
 #!/bin/bash
 # hooks/post-generate.sh
-# PostToolUse hook: runs a compile smoke test after DVP code generation.
+# postToolUse hook for Copilot CLI: compile smoke test after DVP code generation.
 #
-# Triggered after davinci_generate() MCP tool call.
-# Verifies that generated BSW .c/.h files are syntactically valid C.
+# Copilot CLI passes JSON via stdin:
+#   {"timestamp": ..., "cwd": "...", "toolName": "...", "toolArgs": "{...}"}
 #
-# Hook configuration in .claude/hooks.json:
-# {
-#   "hooks": [{
-#     "event": "PostToolUse",
-#     "tools": ["mcp__davinci__davinci_generate"],
-#     "command": "bash hooks/post-generate.sh"
-#   }]
-# }
+# Only acts when toolName is davinci_generate; exits 0 otherwise.
 
 set -euo pipefail
+
+INPUT=$(cat)
+
+# Check toolName — only run for davinci_generate
+TOOL_NAME=$(python3 << 'PYEOF'
+import json, sys
+
+raw = sys.stdin.read()
+try:
+    data = json.loads(raw)
+    print(data.get('toolName', ''))
+except Exception:
+    print('')
+PYEOF
+<<< "$INPUT" 2>/dev/null || echo "")
+
+if [[ "$TOOL_NAME" != "davinci_generate" ]]; then
+    exit 0
+fi
 
 GEN_DIR="generated"
 LOG_DIR="build/reports"
@@ -25,7 +37,6 @@ if [[ ! -d "$GEN_DIR" ]]; then
     exit 0
 fi
 
-# Count generated files
 C_FILES=$(find "$GEN_DIR" -name "*.c" 2>/dev/null | wc -l)
 H_FILES=$(find "$GEN_DIR" -name "*.h" 2>/dev/null | wc -l)
 
@@ -36,13 +47,11 @@ fi
 
 echo "Post-generate check: found $C_FILES .c files, $H_FILES .h files"
 
-# Syntax-only compile check (no linking)
 ERRORS=0
 ERROR_LOG="$LOG_DIR/post_generate_errors.log"
 > "$ERROR_LOG"
 
 for src in $(find "$GEN_DIR" -name "*.c"); do
-    # Try gcc syntax check first, fall back to just parsing
     if command -v gcc &>/dev/null; then
         if ! gcc -fsyntax-only -x c \
             -I "$GEN_DIR" \

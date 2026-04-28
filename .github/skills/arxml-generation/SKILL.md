@@ -1,9 +1,6 @@
 ---
 name: arxml-generation
-description: >
-  ARXML authoring rules for AUTOSAR R4.x ECUC configuration.
-  Covers namespace, container structure, cross-module references,
-  and pre-validation with Python/lxml.
+description: Use when writing or editing ARXML configuration files, when generating ECUC XML containers, or when pre-validating ARXML before DVP import
 ---
 
 # ARXML Generation Rules

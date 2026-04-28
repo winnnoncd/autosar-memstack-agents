@@ -1,8 +1,6 @@
 ---
 name: memstack-memif
-description: >
-  MemIf (Memory Abstraction Interface) configuration patterns.
-  Routes NvM requests to the correct lower-layer module (Fee or Ea).
+description: Use when configuring MemIf device routing, when NvM connects to Fee or Ea, or when MemIf validation errors appear
 ---
 
 # MemIf Configuration Patterns

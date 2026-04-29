@@ -1,8 +1,6 @@
 ---
 name: davinci-cli-reference
-description: >
-  DaVinci Configurator Classic CLI and PAI command reference.
-  Quick-reference for all MCP tool capabilities.
+description: Use when calling DaVinci CLI commands, when working with PAI Groovy scripts, or when mapping MCP tool names to DVP CLI operations
 ---
 
 # DaVinci Configurator CLI / PAI Reference

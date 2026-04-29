@@ -1,49 +1,61 @@
 #!/bin/bash
 # hooks/pre-arxml-write.sh
-# PreToolUse hook: validates ARXML files before writing to project directory.
+# preToolUse hook for Copilot CLI: validates ARXML files before writing.
 #
-# Prevents malformed ARXML from reaching DaVinci import.
-# Catches: XML syntax errors, duplicate SHORT-NAMEs, missing DEST attributes.
+# Copilot CLI passes JSON via stdin:
+#   {"timestamp": ..., "cwd": "...", "toolName": "...", "toolArgs": "{...}"}
 #
-# Hook configuration in .claude/hooks.json:
-# {
-#   "hooks": [{
-#     "event": "PreToolUse",
-#     "pattern": "*.arxml",
-#     "command": "bash hooks/pre-arxml-write.sh"
-#   }]
-# }
+# Outputs {"permissionDecision": "deny", "message": "..."} to block malformed ARXML.
+# Outputs nothing to allow.
 
 set -euo pipefail
 
-FILE="${1:-}"
+INPUT=$(cat)
 
-if [[ -z "$FILE" ]]; then
+# Extract file_path from toolArgs (toolArgs is a JSON-encoded string within the outer JSON)
+FILE_PATH=$(python3 << 'PYEOF'
+import json, sys
+
+raw = sys.stdin.read()
+try:
+    data = json.loads(raw)
+except Exception:
+    sys.exit(0)
+
+args = data.get('toolArgs', '{}')
+if isinstance(args, str):
+    try:
+        args = json.loads(args)
+    except Exception:
+        args = {}
+
+path = (args.get('file_path') or args.get('path') or args.get('target_file') or '').strip()
+print(path)
+PYEOF
+<<< "$INPUT" 2>/dev/null || echo "")
+
+# Only validate .arxml files
+if [[ -z "$FILE_PATH" || "$FILE_PATH" != *.arxml ]]; then
     exit 0
 fi
 
-# Only validate ARXML files
-if [[ "$FILE" != *.arxml ]]; then
+# Skip if file doesn't exist yet (new file being created)
+if [[ ! -f "$FILE_PATH" ]]; then
     exit 0
 fi
 
-# Skip if file doesn't exist yet (being created)
-if [[ ! -f "$FILE" ]]; then
-    exit 0
-fi
-
-# Run Python pre-validation
-python3 -c "
+# Run Python pre-validation — capture output and exit code
+VALIDATION_OUTPUT=$(python3 << PYEOF 2>&1 || true
 import sys
 from lxml import etree
 
-filepath = '$FILE'
+filepath = '$FILE_PATH'
 errors = []
 
 try:
     tree = etree.parse(filepath)
 except etree.XMLSyntaxError as e:
-    print(f'BLOCK: Malformed ARXML: {e}', file=sys.stderr)
+    print(f'XML syntax error: {e}')
     sys.exit(1)
 
 root = tree.getroot()
@@ -70,10 +82,17 @@ for defref in root.iter(f'{{{ns}}}DEFINITION-REF'):
 
 if errors:
     for e in errors:
-        print(f'BLOCK: {e}', file=sys.stderr)
+        print(e)
     sys.exit(1)
+PYEOF
+)
 
-print(f'OK: {filepath} passed pre-validation')
-" 2>&1
+# Check exit code of the subshell
+if [[ $? -ne 0 ]] || echo "$VALIDATION_OUTPUT" | grep -qE "^(XML syntax error|Duplicate SHORT-NAME|DEFINITION-REF missing)"; then
+    SAFE_MSG=$(echo "$VALIDATION_OUTPUT" | head -3 | tr '\n' ' ' | sed 's/"/\\"/g')
+    printf '{"permissionDecision": "deny", "message": "ARXML pre-validation failed for %s: %s"}\n' \
+        "$FILE_PATH" "$SAFE_MSG"
+fi
 
-exit $?
+# Allow by exiting 0 with no output
+exit 0

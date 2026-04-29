@@ -1,8 +1,6 @@
 ---
 name: arxml-validation-fix
-description: >
-  Catalog of DVP validation errors with automated fix strategies
-  for the memory stack modules (NvM, Fee, Ea, MemIf, Fls, Eep).
+description: Use when DVP reports validation errors, when fixing ECUC configuration errors, or when applying ARXML patches after a failed import
 ---
 
 # Validation Error → Fix Pattern Catalog

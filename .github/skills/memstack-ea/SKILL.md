@@ -1,8 +1,6 @@
 ---
 name: memstack-ea
-description: >
-  Ea (EEPROM Abstraction) configuration patterns for AUTOSAR Classic.
-  Used when target memory is external EEPROM instead of internal flash.
+description: Use when configuring Ea blocks for external EEPROM, when target hardware uses EEPROM rather than internal flash
 ---
 
 # Ea Configuration Patterns

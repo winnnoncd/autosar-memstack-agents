@@ -1,12 +1,6 @@
 ---
 name: arxml-generator
-description: >
-  Generates ARXML configuration files for all memory stack modules
-  using Jinja2 templates and computed parameters from input analysis.
-agent: Plan
-context: fork
-allowed-tools: Bash(python:*), Bash(cat:*)
-skills: [memstack-nvm, memstack-fee, memstack-ea, memstack-memif, memstack-fls-eep, arxml-generation]
+description: Use when generating ARXML configuration files for memory stack modules from analysis.json, using Jinja2 templates in bottom-up order
 ---
 
 # ARXML Generator Agent
@@ -22,14 +16,14 @@ ready for DaVinci import.
 This order ensures cross-module references resolve at DVP import time.
 
 ### 1. Fls_Config.arxml (or Eep_Config.arxml)
-- Load skill: `memstack-fls-eep`
+- Invoke skill: `memstack-fls-eep`
 - Source: `analysis.fls_config` (or `analysis.eep_config`)
 - Template: `templates/Fls_Config.arxml.j2`
 - Contains: FlsSectorConfiguration per sector from hardware spec
 - No outgoing cross-module references
 
 ### 2. Fee_Config.arxml (or Ea_Config.arxml)
-- Load skill: `memstack-fee` (or `memstack-ea`)
+- Invoke skill: `memstack-fee` (or `memstack-ea`)
 - Source: `analysis.blocks` + `analysis.fee_layout`
 - Template: `templates/Fee_Config.arxml.j2`
 - Contains:
@@ -39,14 +33,14 @@ This order ensures cross-module references resolve at DVP import time.
 - Cross-ref: Fee → Fls
 
 ### 3. MemIf_Config.arxml
-- Load skill: `memstack-memif`
+- Invoke skill: `memstack-memif`
 - Source: `analysis.memory_type`
 - Template: `templates/MemIf_Config.arxml.j2`
 - Contains: MemIfDevice with reference to Fee or Ea
 - Cross-ref: MemIf → Fee/Ea
 
 ### 4. NvM_Config.arxml
-- Load skill: `memstack-nvm`
+- Invoke skill: `memstack-nvm`
 - Source: `analysis.blocks`
 - Template: `templates/NvM_Config.arxml.j2`
 - Contains:

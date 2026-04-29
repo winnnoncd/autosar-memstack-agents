@@ -1,9 +1,6 @@
 ---
 name: memstack-fee
-description: >
-  Fee (Flash EEPROM Emulation) configuration patterns for AUTOSAR Classic.
-  Covers sector layout, block mapping, immediate data, wear leveling,
-  and cross-module references to Fls and NvM.
+description: Use when configuring Fee sectors or block mappings, when working with flash EEPROM emulation, sector layout, or Fee validation errors
 ---
 
 # Fee Configuration Patterns

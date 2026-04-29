@@ -1,21 +1,17 @@
 #!/bin/bash
 # hooks/session-end.sh
-# SessionEnd hook: writes session progress to CLAUDE.md for cross-session persistence.
+# sessionEnd hook for Copilot CLI: writes session progress to AGENTS.md.
 #
-# This ensures the next Claude Code session picks up where this one left off.
-#
-# Hook configuration in .claude/hooks.json:
-# {
-#   "hooks": [{
-#     "event": "SessionEnd",
-#     "command": "bash hooks/session-end.sh"
-#   }]
-# }
+# Copilot CLI passes JSON via stdin on session end.
+# Appends a session log entry so the next session picks up context.
 
 set -euo pipefail
 
+# Drain stdin (Copilot CLI passes session JSON — content not needed here)
+INPUT=$(cat) || true
+
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M")
-CLAUDE_MD="CLAUDE.md"
+AGENTS_MD="AGENTS.md"
 
 # Count configured blocks (if analysis exists)
 BLOCK_COUNT="N/A"
@@ -50,8 +46,8 @@ except:
 " 2>/dev/null || echo "unknown")
 fi
 
-# Append session delta to CLAUDE.md
-cat >> "$CLAUDE_MD" << EOF
+# Append session delta to AGENTS.md
+cat >> "$AGENTS_MD" << EOF
 
 ### Session $TIMESTAMP
 - Blocks in analysis: $BLOCK_COUNT
@@ -59,4 +55,4 @@ cat >> "$CLAUDE_MD" << EOF
 - Last validation: $VALIDATION_STATUS
 EOF
 
-echo "Session delta written to $CLAUDE_MD"
+echo "Session delta written to $AGENTS_MD"

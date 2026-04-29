@@ -1,9 +1,6 @@
 ---
 name: memstack-nvm
-description: >
-  NvM (NVRAM Manager) module configuration patterns for AUTOSAR Classic.
-  Covers block types, ID assignment, Fee block number calculation,
-  CRC rules, priority, and common validation error fixes.
+description: Use when configuring NvM blocks, setting block types, IDs, or CRC, or when fixing NvM-related DVP validation errors
 ---
 
 # NvM Configuration Patterns

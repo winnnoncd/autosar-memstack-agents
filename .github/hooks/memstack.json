@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "bash hooks/session-start-bootstrap.sh"
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "bash hooks/pre-arxml-write.sh"
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "bash hooks/post-arxml-write.sh"
+      },
+      {
+        "type": "command",
+        "bash": "bash hooks/post-generate.sh"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "bash hooks/session-end.sh"
+      }
+    ]
+  }
+}

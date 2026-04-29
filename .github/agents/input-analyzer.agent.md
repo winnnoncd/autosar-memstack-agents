@@ -1,11 +1,6 @@
 ---
 name: input-analyzer
-description: >
-  Reads NvBlock descriptors and hardware memory spec.
-  Validates inputs, computes derived parameters, flags ASIL blocks.
-agent: Explore
-context: fork
-allowed-tools: Bash(cat:*), Bash(python:*), Bash(jq:*)
+description: Use when analyzing NvBlock descriptor and hardware memory spec input files to validate, compute derived parameters, and flag ASIL blocks
 ---
 
 # Input Analyzer Agent

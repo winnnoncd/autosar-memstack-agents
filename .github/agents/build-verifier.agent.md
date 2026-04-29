@@ -1,11 +1,6 @@
 ---
 name: build-verifier
-description: >
-  Compiles generated BSW code with project toolchain.
-  Runs MISRA-C static analysis on generated files.
-agent: Bash
-context: fork
-allowed-tools: Bash(make:*), Bash(gcc:*), Bash(python:*), Bash(cat:*)
+description: Use when verifying that DaVinci-generated BSW code compiles and passes MISRA-C static analysis
 ---
 
 # Build Verifier Agent
